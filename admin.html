@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ARD Enterprises | Admin Panel</title>
+
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         ADMIN HEADER
+    ========================== -->
+
+    <header class="admin-header">
+
+        <div class="admin-logo">
+            ⚡ ARD Enterprises
+        </div>
+
+        <div class="admin-user">
+            Admin Panel
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <a href="#" class="active">
+            📊 Dashboard
+        </a>
+
+        <a href="#">
+            📦 Products
+        </a>
+
+        <a href="#">
+            ➕ Add Product
+        </a>
+
+        <a href="#">
+            📋 Orders
+        </a>
+
+        <a href="#">
+            📈 Stock
+        </a>
+
+        <a href="#">
+            👥 Customers
+        </a>
+
+        <a href="index.html">
+            🏠 View Website
+        </a>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="admin-main">
+
+        <div class="page-title">
+
+            <div>
+                <p>WELCOME BACK</p>
+                <h1>Dashboard</h1>
+            </div>
+
+           <button class="add-product-btn" onclick="showAddProduct()">
+    + Add Product
+</button>
+
+        </div>
+
+
+        <!-- =========================
+             STATISTICS
+        ========================== -->
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📦
+                </div>
+
+                <div>
+                    <span>Total Products</span>
+                    <h2>3</h2>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📋
+                </div>
+
+                <div>
+                    <span>Orders</span>
+                    <h2>0</h2>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ⚠️
+                </div>
+
+                <div>
+                    <span>Low Stock</span>
+                    <h2>0</h2>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👥
+                </div>
+
+                <div>
+                    <span>Customers</span>
+                    <h2>0</h2>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             QUICK ACTIONS
+        ========================== -->
+
+        <section class="dashboard-section">
+
+            <div class="section-title">
+
+                <h2>Quick Actions</h2>
+
+                <p>
+                    Manage your business quickly.
+                </p>
+
+            </div>
+
+
+            <div class="quick-grid">
+
+                <div class="quick-card">
+
+                    <div>➕</div>
+
+                    <h3>Add Product</h3>
+
+                    <p>
+                        Add a new electrical product.
+                    </p>
+
+                </div>
+
+
+                <div class="quick-card">
+
+                    <div>💰</div>
+
+                    <h3>Update Price</h3>
+
+                    <p>
+                        Change product selling price.
+                    </p>
+
+                </div>
+
+
+                <div class="quick-card">
+
+                    <div>📦</div>
+
+                    <h3>Manage Stock</h3>
+
+                    <p>
+                        Update available stock.
+                    </p>
+
+                </div>
+
+
+                <div class="quick-card">
+
+                    <div>📋</div>
+
+                    <h3>View Orders</h3>
+
+                    <p>
+                        Check customer orders.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             RECENT PRODUCTS
+        ========================== -->
+
+        <section class="dashboard-section">
+
+            <div class="section-title">
+
+                <h2>Products</h2>
+
+                <p>
+                    Recently added products.
+                </p>
+
+            </div>
+
+
+            <div class="product-table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tbody id="productTableBody">
+
+</tbody>
+                        
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+<!-- =========================
+     STOCK MANAGEMENT
+========================= -->
+
+<section class="dashboard-section">
+
+    <div class="section-title">
+
+        <h2>Stock Management</h2>
+
+        <p>
+            Manage stock coming in and going out.
+        </p>
+
+    </div>
+
+
+    <div class="stock-management-grid">
+
+        <!-- STOCK IN -->
+
+        <div class="stock-card">
+
+            <div class="stock-icon">
+                📥
+            </div>
+
+            <h3>Stock In</h3>
+
+            <p>
+                Add new material received.
+            </p>
+
+            <button
+                class="stock-in-btn"
+                onclick="openStockIn()">
+                + Add Stock
+            </button>
+
+        </div>
+
+
+        <!-- STOCK OUT -->
+
+        <div class="stock-card">
+
+            <div class="stock-icon">
+                📤
+            </div>
+
+            <h3>Stock Out</h3>
+
+            <p>
+                Remove material sold or issued.
+            </p>
+
+            <button
+                class="stock-out-btn"
+                onclick="openStockOut()">
+                − Remove Stock
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- =========================
+     STOCK HISTORY
+========================= -->
+
+<section class="dashboard-section">
+
+    <div class="section-title">
+
+        <h2>Stock History</h2>
+
+        <p>
+            Recent stock transactions.
+        </p>
+
+    </div>
+
+
+    <div class="product-table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Date</th>
+                    <th>Product</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                    <th>Stock After</th>
+                    <th>Remarks</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody id="stockHistoryBody">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+<!-- =========================
+     ORDER SUMMARY
+========================= -->
+
+<div class="order-summary-grid">
+
+    <div class="summary-card">
+        <div class="summary-icon">🛒</div>
+        <div>
+            <p>Total Orders</p>
+            <h3 id="totalOrders">0</h3>
+        </div>
+    </div>
+
+    <div class="summary-card">
+        <div class="summary-icon">⏳</div>
+        <div>
+            <p>Pending Orders</p>
+            <h3 id="pendingOrders">0</h3>
+        </div>
+    </div>
+
+    <div class="summary-card">
+        <div class="summary-icon">✅</div>
+        <div>
+            <p>Completed Orders</p>
+            <h3 id="completedOrders">0</h3>
+        </div>
+    </div>
+
+    <div class="summary-card">
+        <div class="summary-icon">💰</div>
+        <div>
+            <p>Total Order Value</p>
+            <h3 id="totalOrderValue">₹0</h3>
+        </div>
+    </div>
+
+</div>
+<!-- =========================
+     CUSTOMER ORDERS
+========================= -->
+
+<section class="dashboard-section">
+
+    <div class="section-title">
+
+        <h2>Customer Orders</h2>
+
+        <p>
+            Manage customer orders received from the website.
+        </p>
+
+    </div>
+
+
+    <div class="product-table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Order ID</th>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Mobile</th>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody id="ordersTableBody">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+<!-- =========================
+     SALES & REPORTS
+========================= -->
+
+<section class="dashboard-section">
+
+    <div class="section-title">
+
+        <h2>📈 Sales & Reports</h2>
+
+        <p>
+            Business sales and order performance.
+        </p>
+
+    </div>
+
+
+    <div class="sales-summary-grid">
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                💰
+            </div>
+
+            <div>
+
+                <p>Today's Sales</p>
+
+                <h3 id="todaySales">
+                    ₹0
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                📅
+            </div>
+
+            <div>
+
+                <p>This Month</p>
+
+                <h3 id="monthSales">
+                    ₹0
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                📦
+            </div>
+
+            <div>
+
+                <p>Completed Orders</p>
+
+                <h3 id="salesCompletedOrders">
+                    0
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                🛍️
+            </div>
+
+            <div>
+
+                <p>Items Sold</p>
+
+                <h3 id="itemsSold">
+                    0
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- =========================
+     DATA BACKUP
+========================= -->
+
+<section class="dashboard-section">
+
+    <div class="section-title">
+
+        <h2>💾 Data Backup</h2>
+
+        <p>
+            Backup your products, orders and stock history.
+        </p>
+
+    </div>
+
+
+    <div class="backup-actions">
+
+        <button
+            class="backup-btn"
+            onclick="backupProducts()">
+            📦 Backup Products
+        </button>
+
+
+        <button
+            class="backup-btn"
+            onclick="backupOrders()">
+            🛒 Backup Orders
+        </button>
+
+
+        <button
+            class="backup-btn"
+            onclick="backupStockHistory()">
+            📊 Backup Stock History
+        </button>
+
+
+        <button
+            class="backup-btn"
+            onclick="exportExcel()">
+            📊 Export Excel
+        </button>
+<button
+    class="backup-btn"
+    onclick="exportPDF()">
+    📄 Export PDF
+</button>
+
+        <button
+            class="backup-btn full-backup"
+            onclick="fullBackup()">
+            💾 Full Backup
+        </button>
+
+    </div>
+
+</section>
+<!-- =========================
+     STOCK MODAL
+========================= -->
+
+<div class="modal" id="stockModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <div>
+
+                <p>INVENTORY MANAGEMENT</p>
+
+                <h2 id="stockModalTitle">
+                    Stock In
+                </h2>
+
+            </div>
+
+            <button
+                class="close-modal"
+                onclick="closeStockModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="stockForm">
+
+            <div class="form-group">
+
+                <label>
+                    Select Product
+                </label>
+
+                <select
+                    id="stockProduct"
+                    required>
+
+                    <option value="">
+                        Select Product
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Quantity
+                </label>
+
+                <input
+                    type="number"
+                    id="stockQuantity"
+                    min="1"
+                    placeholder="Enter quantity"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Remarks
+                </label>
+
+                <textarea
+                    id="stockRemarks"
+                    rows="3"
+                    placeholder="e.g. Purchase from supplier"></textarea>
+
+            </div>
+
+
+            <div class="form-buttons">
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="closeStockModal()">
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-product-btn">
+                    Save Stock
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+    </main>
+
+<!-- =========================
+     ADD PRODUCT MODAL
+========================= -->
+
+<div class="modal" id="productModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <div>
+                <p>PRODUCT MANAGEMENT</p>
+                <h2>Add New Product</h2>
+            </div>
+
+            <button
+                class="close-modal"
+                onclick="closeAddProduct()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="productForm">
+
+            <div class="form-group">
+
+                <label>Product Name</label>
+
+                <input
+                    type="text"
+                    id="productName"
+                    placeholder="e.g. LED Bulb 12W"
+                    required>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>Category</label>
+
+                    <select id="productCategory" required>
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                        <option value="LED Lights">
+                            LED Lights
+                        </option>
+
+                        <option value="Switches & Sockets">
+                            Switches & Sockets
+                        </option>
+
+                        <option value="MCB & Protection">
+                            MCB & Protection
+                        </option>
+
+                        <option value="Wires & Cables">
+                            Wires & Cables
+                        </option>
+
+                        <option value="Fans">
+                            Fans
+                        </option>
+
+                        <option value="LT / HT Material">
+                            LT / HT Material
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Price (₹)</label>
+
+                    <input
+                        type="number"
+                        id="productPrice"
+                        placeholder="Enter price"
+                        min="0"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>Stock Quantity</label>
+
+                    <input
+                        type="number"
+                        id="productStock"
+                        placeholder="Enter stock"
+                        min="0"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Product Code</label>
+
+                    <input
+                        type="text"
+                        id="productCode"
+                        placeholder="e.g. LED-001">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Product Description</label>
+
+                <textarea
+                    id="productDescription"
+                    rows="4"
+                    placeholder="Enter product details..."></textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Product Image</label>
+
+                <input
+                    type="file"
+                    id="productImage"
+                    accept="image/*">
+
+            </div>
+
+
+            <div class="form-buttons">
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="closeAddProduct()">
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-product-btn">
+                    Save Product
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

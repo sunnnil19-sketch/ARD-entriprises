@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ARD Enterprises | Electrical Products</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="header">
+
+        <div class="logo">
+            <span>⚡</span>
+            <div>
+                <h1>ARD Enterprises</h1>
+                <p>Electrical Solutions</p>
+            </div>
+        </div>
+
+        <nav class="navbar">
+            <a href="#home">Home</a>
+            <a href="#categories">Categories</a>
+            <a href="#products">Products</a>
+            <a href="#contact">Contact</a>
+        </nav>
+
+        <a href="admin.html" class="admin-btn">
+            Admin
+        </a>
+
+    </header>
+
+
+    <!-- =========================
+         HERO SECTION
+    ========================== -->
+
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <p class="hero-small">
+                Welcome to ARD Enterprises
+            </p>
+
+            <h2>
+                Your Trusted
+                <span>Electrical Material</span>
+                Supplier
+            </h2>
+
+            <p>
+                Quality electrical products for contractors,
+                businesses and customers.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="#products" class="primary-btn">
+                    View Products
+                </a>
+
+                <a href="#contact" class="secondary-btn">
+                    Contact Us
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         CATEGORIES
+    ========================== -->
+
+    <section class="categories-section" id="categories">
+
+        <div class="section-heading">
+
+            <p>SHOP BY CATEGORY</p>
+
+            <h2>Electrical Materials</h2>
+
+            <span>
+                Find the products you need quickly.
+            </span>
+
+        </div>
+
+
+        <div class="categories-grid">
+
+            <div class="category-card">
+                <div class="category-icon">💡</div>
+                <h3>LED Lights</h3>
+                <p>LED bulbs, panels and lighting.</p>
+            </div>
+
+
+            <div class="category-card">
+                <div class="category-icon">🔌</div>
+                <h3>Switches & Sockets</h3>
+                <p>Quality switches and accessories.</p>
+            </div>
+
+
+            <div class="category-card">
+                <div class="category-icon">⚡</div>
+                <h3>MCB & Protection</h3>
+                <p>MCB, RCCB and electrical protection.</p>
+            </div>
+
+
+            <div class="category-card">
+                <div class="category-icon">🔗</div>
+                <h3>Wires & Cables</h3>
+                <p>Electrical wires and cables.</p>
+            </div>
+
+
+            <div class="category-card">
+                <div class="category-icon">🌀</div>
+                <h3>Fans</h3>
+                <p>Ceiling, exhaust and other fans.</p>
+            </div>
+
+
+            <div class="category-card">
+                <div class="category-icon">🏗️</div>
+                <h3>LT / HT Material</h3>
+                <p>Electrical line and distribution material.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         PRODUCTS
+    ========================== -->
+
+    <section class="products-section" id="products">
+
+        <div class="section-heading">
+
+            <p>OUR PRODUCTS</p>
+
+            <h2>Popular Products</h2>
+
+            <span>
+                More products will be added from the Admin Panel.
+            </span>
+
+        </div>
+
+
+        <div class="products-grid">
+
+            <!-- Product 1 -->
+
+            <div class="product-card">
+
+                <div class="product-image">
+                    💡
+                </div>
+
+                <div class="product-info">
+
+                    <small>LED LIGHTS</small>
+
+                    <h3>LED Bulb 12W</h3>
+
+                    <p class="product-price">
+                        ₹120
+                    </p>
+
+                    <button
+                        class="whatsapp-btn"
+                        onclick="orderWhatsApp('LED Bulb 12W', 120)">
+                        Order on WhatsApp
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Product 2 -->
+
+            <div class="product-card">
+
+                <div class="product-image">
+                    🔌
+                </div>
+
+                <div class="product-info">
+
+                    <small>SWITCHES</small>
+
+                    <h3>Modular Switch</h3>
+
+                    <p class="product-price">
+                        ₹85
+                    </p>
+
+                    <button
+                        class="whatsapp-btn"
+                        onclick="orderWhatsApp('Modular Switch', 85)">
+                        Order on WhatsApp
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Product 3 -->
+
+            <div class="product-card">
+
+                <div class="product-image">
+                    ⚡
+                </div>
+
+                <div class="product-info">
+
+                    <small>MCB</small>
+
+                    <h3>SP MCB 16A</h3>
+
+                    <p class="product-price">
+                        ₹180
+                    </p>
+
+                    <button
+                        class="whatsapp-btn"
+                        onclick="orderWhatsApp('SP MCB 16A', 180)">
+                        Order on WhatsApp
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         CONTACT
+    ========================== -->
+
+    <section class="contact-section" id="contact">
+
+        <div class="contact-content">
+
+            <p>GET IN TOUCH</p>
+
+            <h2>Need Electrical Material?</h2>
+
+            <span>
+                Contact ARD Enterprises for product enquiries
+                and orders.
+            </span>
+
+            <div class="contact-buttons">
+
+                <a href="tel:+919857746076" class="call-btn">
+                    📞 Call Us
+                </a>
+
+                <a
+                    href="https://wa.me/919857746076"
+                    target="_blank"
+                    class="whatsapp-main">
+                    💬 WhatsApp
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <div>
+            <strong>⚡ ARD Enterprises</strong>
+            <p>Electrical Solutions & Material Supplier</p>
+        </div>
+
+        <p>
+            © 2026 ARD Enterprises. All Rights Reserved.
+        </p>
+
+    </footer>
+
+
+        ARD ENTERPRISES PRODUCTS
+========================= -->
+
+<section class="products-section" id="products">
+
+    <div class="products-heading">
+
+        <p>OUR PRODUCTS</p>
+
+        <h2>Electrical Materials</h2>
+
+        <span>
+            Quality electrical products at competitive prices.
+        </span>
+
+    </div>
+
+    <div
+        class="customer-product-grid"
+        id="customerProductGrid">
+
+    </div>
+
+</section>
+<!-- =========================
+     CUSTOMER ORDER MODAL
+========================= -->
+
+<div class="order-modal" id="orderModal">
+
+    <div class="order-modal-content">
+
+        <button
+            class="order-close"
+            onclick="closeOrderModal()">
+            ×
+        </button>
+
+        <h2>Place Your Order</h2>
+
+        <p id="orderProductName"></p>
+
+        <form id="customerOrderForm">
+
+            <input
+                type="text"
+                id="customerName"
+                placeholder="Your Name"
+                required>
+
+            <input
+                type="tel"
+                id="customerMobile"
+                placeholder="Mobile Number"
+                required>
+
+            <input
+                type="number"
+                id="customerQuantity"
+                min="1"
+                value="1"
+                required>
+
+            <button
+                type="submit"
+                class="place-order-btn">
+                Place Order on WhatsApp
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+    <script src="script.js"></script>
+
+</body>
+</html>
