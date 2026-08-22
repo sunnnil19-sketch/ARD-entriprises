@@ -1187,7 +1187,17 @@ function displayCustomerProducts() {
                     >
                         ${buttonText}
                     </button>
-
+<button
+    class="customer-cart-btn"
+    ${
+        product.stock <= 0
+        ? "disabled"
+        : ""
+    }
+    onclick="addToCart(${product.id})"
+>
+    🛒 Add to Cart
+</button>
                 </div>
 
             </div>
@@ -1242,8 +1252,123 @@ function changeQuantity(productId, change) {
     }
 
     quantityElement.textContent = quantity;
-}
+}// =====================================
+// CART CHECKOUT
+// =====================================
 
+function checkoutCart() {
+
+    if (cart.length === 0) {
+
+        alert("Your cart is empty.");
+
+        return;
+    }
+
+    const orderModal =
+        document.getElementById("orderModal");
+
+    if (orderModal) {
+
+        orderModal.style.display = "flex";
+
+    }
+
+    const orderProductName =
+        document.getElementById(
+            "orderProductName"
+        );
+
+    if (orderProductName) {
+
+        orderProductName.textContent =
+            cart.map(function(item) {
+
+                return (
+                    item.name +
+                    " × " +
+                    item.quantity
+                );
+
+            }).join(", ");
+
+    }
+
+    const quantityInput =
+        document.getElementById(
+            "customerQuantity"
+        );
+
+    if (quantityInput) {
+
+        quantityInput.value = 1;
+
+    }
+
+}
+// =====================================
+// CUSTOMER CART
+// =====================================
+
+let cart = JSON.parse(
+    localStorage.getItem("ardCart")
+) || [];
+
+
+function addToCart(productId) {
+
+    const products =
+        JSON.parse(
+            localStorage.getItem("ardProducts")
+        ) || [];
+
+    const product =
+        products.find(function(item) {
+            return item.id === productId;
+        });
+
+    if (!product) return;
+
+    const quantityElement =
+        document.getElementById(
+            "quantity-" + productId
+        );
+
+    const quantity =
+        quantityElement
+            ? Number(quantityElement.textContent)
+            : 1;
+
+    const existingItem =
+        cart.find(function(item) {
+            return item.id === productId;
+        });
+
+    if (existingItem) {
+
+        existingItem.quantity += quantity;
+
+    } else {
+
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: Number(product.price),
+            quantity: quantity
+        });
+
+    }
+
+    localStorage.setItem(
+        "ardCart",
+        JSON.stringify(cart)
+    );
+
+    alert(
+        product.name +
+        " added to cart."
+    );
+}
 
 // =====================================
 // WHATSAPP ORDER WITH QUANTITY
@@ -1333,7 +1458,6 @@ function closeOrderModal() {
     selectedOrderProduct = null;
 }
 
-
 // =====================================
 // SUBMIT CUSTOMER ORDER
 // =====================================
@@ -1356,10 +1480,6 @@ document.addEventListener(
 
                 event.preventDefault();
 
-                if (!selectedOrderProduct) {
-                    return;
-                }
-
 
                 const customerName =
                     document.getElementById(
@@ -1381,9 +1501,11 @@ document.addEventListener(
                     );
 
 
-                if (!customerName ||
+                if (
+                    !customerName ||
                     !customerMobile ||
-                    quantity < 1) {
+                    quantity < 1
+                ) {
 
                     alert(
                         "Please fill all details."
@@ -1392,62 +1514,208 @@ document.addEventListener(
                     return;
                 }
 
-                    const total =
-                    selectedOrderProduct.price *
-                    quantity;
-// =================================
-// SAVE CUSTOMER ORDER
-// =================================
 
-let customerOrders =
-    JSON.parse(
-        localStorage.getItem("ardOrders")
-    ) || [];
+                // =====================================
+                // CREATE ORDER ITEMS
+                // =====================================
+
+                let orderItems = [];
 
 
-const newOrder = {
+                // CART ORDER
 
-    id:
-        "ORD-" +
-        Date.now(),
+                if (cart.length > 0) {
 
-    date:
-        new Date().toLocaleString("en-IN"),
+                    orderItems =
+                        cart.map(function(item) {
 
-    customerName:
-        customerName,
+                            return {
 
-    customerMobile:
-        customerMobile,
+                                productName:
+                                    item.name,
 
-    productName:
-        selectedOrderProduct.name,
+                                quantity:
+                                    Number(
+                                        item.quantity
+                                    ),
 
-    quantity:
-        quantity,
+                                price:
+                                    Number(
+                                        item.price
+                                    ),
 
-    price:
-        selectedOrderProduct.price,
+                                total:
+                                    Number(
+                                        item.price
+                                    ) *
+                                    Number(
+                                        item.quantity
+                                    )
 
-    total:
-        total,
+                            };
 
-    status:
-        "Pending"
-
-};
-
-
-customerOrders.unshift(newOrder);
+                        });
 
 
-localStorage.setItem(
-    "ardOrders",
-    JSON.stringify(customerOrders)
-);
+                // SINGLE PRODUCT ORDER
+
+                } else if (selectedOrderProduct) {
+
+                    orderItems = [
+
+                        {
+
+                            productName:
+                                selectedOrderProduct.name,
+
+                            quantity:
+                                quantity,
+
+                            price:
+                                Number(
+                                    selectedOrderProduct.price
+                                ),
+
+                            total:
+                                Number(
+                                    selectedOrderProduct.price
+                                ) *
+                                quantity
+
+                        }
+
+                    ];
+
+                }
+
+
+                if (orderItems.length === 0) {
+
+                    alert(
+                        "No product selected."
+                    );
+
+                    return;
+                }
+
+
+                // =====================================
+                // CALCULATE GRAND TOTAL
+                // =====================================
+
+                const total =
+                    orderItems.reduce(
+                        function(sum, item) {
+
+                            return sum +
+                                Number(item.total);
+
+                        },
+                        0
+                    );
+
+
+                // =====================================
+                // LOAD CUSTOMER ORDERS
+                // =====================================
+
+                let customerOrders =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "ardOrders"
+                        )
+                    ) || [];
+
+
+                // =====================================
+                // CREATE ORDER
+                // =====================================
+
+                const orderId =
+                    "ORD-" +
+                    Date.now();
+
+
+                const newOrder = {
+
+                    id:
+                        orderId,
+
+                    date:
+                        new Date().toLocaleString(
+                            "en-IN"
+                        ),
+
+                    customerName:
+                        customerName,
+
+                    customerMobile:
+                        customerMobile,
+
+                    items:
+                        orderItems,
+
+                    productName:
+                        orderItems[0].productName,
+
+                    quantity:
+                        orderItems[0].quantity,
+
+                    price:
+                        orderItems[0].price,
+
+                    total:
+                        total,
+
+                    status:
+                        "Pending"
+
+                };
+
+
+                // =====================================
+                // SAVE ORDER
+                // =====================================
+
+                customerOrders.unshift(
+                    newOrder
+                );
+
+
+                localStorage.setItem(
+                    "ardOrders",
+                    JSON.stringify(
+                        customerOrders
+                    )
+                );
+
+
+                // =====================================
+                // WHATSAPP MESSAGE
+                // =====================================
 
                 const phoneNumber =
                     "919857746076";
+
+
+                let productMessage = "";
+
+
+                orderItems.forEach(
+                    function(item, index) {
+
+                        productMessage +=
+                            (index + 1) +
+                            ". " +
+                            item.productName +
+                            " × " +
+                            item.quantity +
+                            " = ₹" +
+                            item.total +
+                            "%0A";
+
+                    }
+                );
 
 
                 const message =
@@ -1461,21 +1729,15 @@ localStorage.setItem(
 
                     "Mobile: " +
                     customerMobile +
+                    "%0A%0A" +
+
+                    "Products:%0A" +
+
+                    productMessage +
+
                     "%0A" +
 
-                    "Product: " +
-                    selectedOrderProduct.name +
-                    "%0A" +
-
-                    "Quantity: " +
-                    quantity +
-                    "%0A" +
-
-                    "Price: ₹" +
-                    selectedOrderProduct.price +
-                    "%0A" +
-
-                    "Total: ₹" +
+                    "Grand Total: ₹" +
                     total;
 
 
@@ -1492,15 +1754,44 @@ localStorage.setItem(
                 );
 
 
+                // =====================================
+                // CLEAR CART
+                // =====================================
+
+                cart = [];
+
+                localStorage.setItem(
+                    "ardCart",
+                    JSON.stringify(cart)
+                );
+
+
+                // =====================================
+                // CLOSE ORDER MODAL
+                // =====================================
+
                 closeOrderModal();
 
+
                 orderForm.reset();
+
+
+                if (
+                    typeof displayCart ===
+                    "function"
+                ) {
+
+                    displayCart();
+
+                }
 
             }
         );
 
     }
-);// =====================================
+);
+
+// =====================================
 // CUSTOMER ORDERS
 // =====================================
 
@@ -1508,7 +1799,6 @@ let customerOrders =
     JSON.parse(
         localStorage.getItem("ardOrders")
     ) || [];
-
 
 // =====================================
 // DISPLAY ORDERS
@@ -1531,19 +1821,15 @@ function displayCustomerOrders() {
 
         tableBody.innerHTML = `
             <tr>
-
                 <td
-                    colspan="8"
+                    colspan="7"
                     style="
                         text-align:center;
                         padding:30px;
                     "
                 >
-
                     No customer orders yet.
-
                 </td>
-
             </tr>
         `;
 
@@ -1558,20 +1844,97 @@ function displayCustomerOrders() {
 
 
         if (order.status === "Confirmed") {
+
             statusClass =
                 "order-confirmed";
+
         }
 
         else if (order.status === "Completed") {
+
             statusClass =
                 "order-completed";
+
         }
 
         else if (order.status === "Cancelled") {
+
             statusClass =
                 "order-cancelled";
+
         }
 
+
+        // =====================================
+        // PRODUCTS DISPLAY
+        // =====================================
+
+        let productsHTML = "";
+
+
+        if (
+            order.items &&
+            Array.isArray(order.items)
+        ) {
+
+            order.items.forEach(
+                function(item) {
+
+                    productsHTML += `
+                        <div
+                            style="
+                                margin-bottom:6px;
+                            "
+                        >
+                            <strong>
+                                ${item.productName}
+                            </strong>
+
+                            × ${item.quantity}
+
+                            <br>
+
+                            <small>
+                                ₹${item.price}
+                                × ${item.quantity}
+                                = ₹${item.total}
+                            </small>
+                        </div>
+                    `;
+
+                }
+            );
+
+        }
+
+        else {
+
+            // Old single-product order
+
+            productsHTML = `
+                <div>
+                    <strong>
+                        ${order.productName}
+                    </strong>
+
+                    × ${order.quantity}
+
+                    <br>
+
+                    <small>
+                        ₹${order.price}
+                        × ${order.quantity}
+                        = ₹${order.total}
+                    </small>
+                </div>
+            `;
+
+        }
+
+
+        // =====================================
+        // CREATE TABLE ROW
+        // =====================================
 
         tableBody.innerHTML += `
 
@@ -1583,96 +1946,148 @@ function displayCustomerOrders() {
                     </strong>
                 </td>
 
+
                 <td>
                     ${order.date}
                 </td>
+
 
                 <td>
                     ${order.customerName}
                 </td>
 
+
                 <td>
                     ${order.customerMobile}
                 </td>
 
+
                 <td>
-                    ${order.productName}
+                    ${productsHTML}
                 </td>
 
+
                 <td>
-                    ${order.quantity}
+                    <strong>
+                        ₹${order.total}
+                    </strong>
                 </td>
 
+
                 <td>
-                    ₹${order.total}
+
+                    <select
+                        class="order-status-select"
+                        onchange="
+                            updateOrderStatus(
+                                '${order.id}',
+                                this.value
+                            )
+                        "
+                    >
+
+                        <option
+                            value="Pending"
+                            ${
+                                order.status ===
+                                "Pending"
+                                ? "selected"
+                                : ""
+                            }
+                        >
+                            Pending
+                        </option>
+
+
+                        <option
+                            value="Confirmed"
+                            ${
+                                order.status ===
+                                "Confirmed"
+                                ? "selected"
+                                : ""
+                            }
+                        >
+                            Confirmed
+                        </option>
+
+
+                        <option
+                            value="Completed"
+                            ${
+                                order.status ===
+                                "Completed"
+                                ? "selected"
+                                : ""
+                            }
+                        >
+                            Completed
+                        </option>
+
+
+                        <option
+                            value="Cancelled"
+                            ${
+                                order.status ===
+                                "Cancelled"
+                                ? "selected"
+                                : ""
+                            }
+                        >
+                            Cancelled
+                        </option>
+
+                    </select>
+
+
+                    <br><br>
+
+
+                    <button
+                        class="order-action-btn"
+                        onclick="
+                            viewOrder('${order.id}')
+                        "
+                    >
+                        👁 View
+                    </button>
+
+
+                    <button
+                        class="order-action-btn"
+                        onclick="
+                            messageCustomer(
+                                '${order.customerMobile}',
+                                '${order.id}'
+                            )
+                        "
+                    >
+                        📱 WhatsApp
+                    </button>
+
+
+                    <button
+                        class="order-action-btn"
+                        onclick="
+                            callCustomer(
+                                '${order.customerMobile}'
+                            )
+                        "
+                    >
+                        📞 Call
+                    </button>
+
                 </td>
 
-                <td>
-
-    <select
-        class="order-status-select"
-        onchange="updateOrderStatus('${order.id}', this.value)"
-    >
-
-        <option
-            value="Pending"
-            ${order.status === "Pending" ? "selected" : ""}
-        >
-            Pending
-        </option>
-
-        <option
-            value="Confirmed"
-            ${order.status === "Confirmed" ? "selected" : ""}
-        >
-            Confirmed
-        </option>
-
-        <option
-            value="Completed"
-            ${order.status === "Completed" ? "selected" : ""}
-        >
-            Completed
-        </option>
-
-        <option
-            value="Cancelled"
-            ${order.status === "Cancelled" ? "selected" : ""}
-        >
-            Cancelled
-        </option>
-
-    </select>
-
-</td>
-<td>
-
-    <button
-        class="order-action-btn"
-        onclick="viewOrder('${order.id}')">
-        👁 View
-    </button>
-
-    <button
-        class="order-action-btn"
-        onclick="messageCustomer('${order.customerMobile}', '${order.id}')">
-        📱 WhatsApp
-    </button>
-
-    <button
-        class="order-action-btn"
-        onclick="callCustomer('${order.customerMobile}')">
-        📞 Call
-    </button>
-
-</td>
             </tr>
 
         `;
 
     });
 
-}// =====================================
+}
+
+// =====================================
 // UPDATE ORDER STATUS
 // =====================================
 
@@ -2644,4 +3059,271 @@ function exportPDF() {
         "PDF report downloaded successfully!"
     );
 
+}// =====================================
+// ADMIN LOGIN
+// =====================================
+
+function adminLogin() {
+
+    const username =
+        document.getElementById("adminUsername").value.trim();
+
+    const password =
+        document.getElementById("adminPassword").value;
+
+    const loginError =
+        document.getElementById("loginError");
+
+
+    // TEMPORARY DEVELOPMENT LOGIN
+    const correctUsername = "admin";
+    const correctPassword = "ARD@2026";
+
+
+    if (
+        username === correctUsername &&
+        password === correctPassword
+    ) {
+
+        sessionStorage.setItem(
+            "ardAdminLoggedIn",
+            "true"
+        );
+
+
+        document.getElementById(
+            "adminLogin"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "adminPanel"
+        ).style.display = "block";
+
+
+        loginError.textContent = "";
+
+    } else {
+
+        loginError.textContent =
+            "❌ Invalid username or password.";
+
+    }
+
 }
+
+
+// =====================================
+// CHECK ADMIN LOGIN
+// =====================================
+
+function checkAdminLogin() {
+
+    const loggedIn =
+        sessionStorage.getItem(
+            "ardAdminLoggedIn"
+        );
+
+
+    if (loggedIn === "true") {
+
+        document.getElementById(
+            "adminLogin"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "adminPanel"
+        ).style.display = "block";
+
+    } else {
+
+        document.getElementById(
+            "adminLogin"
+        ).style.display = "flex";
+
+
+        document.getElementById(
+            "adminPanel"
+        ).style.display = "none";
+
+    }
+
+}
+
+
+// =====================================
+// RUN LOGIN CHECK
+// =====================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        checkAdminLogin();
+
+    }
+);// =====================================
+// ADMIN LOGOUT
+// =====================================
+
+function adminLogout() {
+
+    sessionStorage.removeItem(
+        "ardAdminLoggedIn"
+    );
+
+    document.getElementById(
+        "adminPanel"
+    ).style.display = "none";
+
+    document.getElementById(
+        "adminLogin"
+    ).style.display = "flex";
+
+    document.getElementById(
+        "adminUsername"
+    ).value = "";
+
+    document.getElementById(
+        "adminPassword"
+    ).value = "";
+
+}// =====================================
+// CART DISPLAY
+// =====================================
+
+function openCart() {
+
+    const cartModal =
+        document.getElementById("cartModal");
+
+    if (!cartModal) return;
+
+    cartModal.style.display = "flex";
+
+    displayCart();
+}
+
+
+function closeCart() {
+
+    const cartModal =
+        document.getElementById("cartModal");
+
+    if (!cartModal) return;
+
+    cartModal.style.display = "none";
+}
+
+
+function displayCart() {
+
+    const cartItems =
+        document.getElementById("cartItems");
+
+    const cartCount =
+        document.getElementById("cartCount");
+
+    const cartTotal =
+        document.getElementById("cartTotal");
+
+    if (!cartItems) return;
+
+
+    cartItems.innerHTML = "";
+
+    let total = 0;
+    let count = 0;
+
+
+    if (cart.length === 0) {
+
+        cartItems.innerHTML = `
+            <p>Your cart is empty.</p>
+        `;
+
+        if (cartCount) {
+            cartCount.textContent = "0";
+        }
+
+        if (cartTotal) {
+            cartTotal.textContent = "₹0";
+        }
+
+        return;
+    }
+
+
+    cart.forEach(function(item, index) {
+
+        const itemTotal =
+            Number(item.price) *
+            Number(item.quantity);
+
+        total += itemTotal;
+        count += Number(item.quantity);
+
+
+        cartItems.innerHTML += `
+
+            <div class="cart-item">
+
+                <div>
+                    <strong>
+                        ${item.name}
+                    </strong>
+
+                    <p>
+                        ₹${item.price}
+                        ×
+                        ${item.quantity}
+                    </p>
+
+                    <strong>
+                        ₹${itemTotal}
+                    </strong>
+                </div>
+
+
+                <button
+                    onclick="removeFromCart(${index})">
+                    ❌
+                </button>
+
+            </div>
+
+        `;
+
+    });
+
+
+    if (cartCount) {
+        cartCount.textContent = count;
+    }
+
+
+    if (cartTotal) {
+        cartTotal.textContent =
+            "₹" + total;
+    }
+
+}
+
+
+// =====================================
+// REMOVE FROM CART
+// =====================================
+
+function removeFromCart(index) {
+
+    cart.splice(index, 1);
+
+    localStorage.setItem(
+        "ardCart",
+        JSON.stringify(cart)
+    );
+
+    displayCart();
+}
+displayCart();

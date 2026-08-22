@@ -10,7 +10,63 @@
 </head>
 
 <body>
+<body>
 
+    <!-- =========================
+         ADMIN LOGIN
+    ========================== -->
+
+    <div id="adminLogin" class="admin-login">
+
+        <div class="login-box">
+
+            <div class="login-logo">
+                ⚡ ARD Enterprises
+            </div>
+
+            <h2>Admin Login</h2>
+
+            <p>Enter your admin credentials</p>
+
+
+            <input
+                type="text"
+                id="adminUsername"
+                placeholder="Username"
+                autocomplete="username"
+            >
+
+
+            <input
+                type="password"
+                id="adminPassword"
+                placeholder="Password"
+                autocomplete="current-password"
+            >
+
+
+            <button
+                type="button"
+                onclick="adminLogin()">
+                🔐 Login
+            </button>
+
+
+            <p
+                id="loginError"
+                class="login-error">
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         ADMIN PANEL
+    ========================== -->
+
+    <div id="adminPanel">
     <!-- =========================
          ADMIN HEADER
     ========================== -->
@@ -23,6 +79,18 @@
 
         <div class="admin-user">
             Admin Panel
+           <div class="admin-user">
+
+    <span>Admin Panel</span>
+
+    <button
+        type="button"
+        class="logout-btn"
+        onclick="adminLogout()">
+        🚪 Logout
+    </button>
+
+</div> 
         </div>
 
     </header>

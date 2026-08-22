@@ -144,7 +144,54 @@
         </div>
 
     </section>
+<!-- =========================
+     SHOPPING CART
+========================= -->
 
+<div class="cart-container">
+
+    <button
+        class="cart-toggle-btn"
+        onclick="openCart()">
+        🛒 Cart
+        <span id="cartCount">0</span>
+    </button>
+
+</div>
+
+
+<div
+    class="cart-modal"
+    id="cartModal">
+
+    <div class="cart-modal-content">
+
+        <button
+            class="cart-close"
+            onclick="closeCart()">
+            ×
+        </button>
+
+        <h2>🛒 Your Cart</h2>
+
+        <div id="cartItems"></div>
+
+        <div class="cart-total">
+            Total:
+            <strong id="cartTotal">
+                ₹0
+            </strong>
+        </div>
+
+        <button
+            class="cart-order-btn"
+            onclick="checkoutCart()">
+            Place Order
+        </button>
+
+    </div>
+
+</div>
 
     <!-- =========================
          PRODUCTS
