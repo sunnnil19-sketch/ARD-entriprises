@@ -3551,4 +3551,1303 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
+});/* =========================================================
+   ARD ENTERPRISES - MASTER ADMIN NAVIGATION & DASHBOARD
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    setupAdminNavigation();
+    updateDashboardStatistics();
+
 });
+
+
+/* =========================================================
+   ADMIN SIDEBAR NAVIGATION
+   ========================================================= */
+
+function setupAdminNavigation() {
+
+    const sidebar =
+        document.querySelector(".sidebar");
+
+    if (!sidebar) return;
+
+    const links =
+        sidebar.querySelectorAll("a");
+
+    links.forEach(function (link) {
+
+        const text =
+            link.textContent
+                .trim()
+                .toLowerCase();
+
+        /* Remove old # behaviour */
+        if (text !== "🏠 view website") {
+            link.removeAttribute("href");
+        }
+
+        link.style.cursor = "pointer";
+
+        link.addEventListener("click", function (event) {
+
+            /* -----------------------------------------
+               VIEW WEBSITE
+            ----------------------------------------- */
+
+            if (
+                text.includes("view website")
+            ) {
+
+                window.location.href =
+                    "index.html";
+
+                return;
+            }
+
+
+            event.preventDefault();
+
+
+            /* -----------------------------------------
+               DASHBOARD
+            ----------------------------------------- */
+
+            if (
+                text.includes("dashboard")
+            ) {
+
+                scrollToTop();
+
+                setActiveSidebar(link);
+
+                return;
+            }
+
+
+            /* -----------------------------------------
+               PRODUCTS
+            ----------------------------------------- */
+
+            if (
+                text.includes("products") &&
+                !text.includes("add product")
+            ) {
+
+                goToProducts();
+
+                setActiveSidebar(link);
+
+                return;
+            }
+
+
+            /* -----------------------------------------
+               ADD PRODUCT
+            ----------------------------------------- */
+
+            if (
+                text.includes("add product")
+            ) {
+
+                if (
+                    typeof openAddProduct === "function"
+                ) {
+
+                    openAddProduct();
+
+                } else if (
+                    typeof showAddProduct === "function"
+                ) {
+
+                    showAddProduct();
+
+                }
+
+                setActiveSidebar(link);
+
+                return;
+            }
+
+
+            /* -----------------------------------------
+               ORDERS
+            ----------------------------------------- */
+
+            if (
+                text.includes("orders")
+            ) {
+
+                goToOrders();
+
+                setActiveSidebar(link);
+
+                return;
+            }
+
+
+            /* -----------------------------------------
+               STOCK
+            ----------------------------------------- */
+
+            if (
+                text.includes("stock")
+            ) {
+
+                goToStock();
+
+                setActiveSidebar(link);
+
+                return;
+            }
+
+
+            /* -----------------------------------------
+               CUSTOMERS
+            ----------------------------------------- */
+
+            if (
+                text.includes("customers")
+            ) {
+
+                goToCustomers();
+
+                setActiveSidebar(link);
+
+                return;
+            }
+
+        });
+
+    });
+
+}
+
+
+/* =========================================================
+   ACTIVE SIDEBAR BUTTON
+   ========================================================= */
+
+function setActiveSidebar(activeLink) {
+
+    const sidebar =
+        document.querySelector(".sidebar");
+
+    if (!sidebar) return;
+
+    sidebar
+        .querySelectorAll("a")
+        .forEach(function (link) {
+
+            link.classList.remove("active");
+
+        });
+
+    activeLink.classList.add("active");
+
+}
+
+
+/* =========================================================
+   DASHBOARD TOP
+   ========================================================= */
+
+function scrollToTop() {
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+/* =========================================================
+   PRODUCTS
+   ========================================================= */
+
+function goToProducts() {
+
+    const productTable =
+        document.getElementById(
+            "productTableBody"
+        );
+
+    if (!productTable) return;
+
+    const section =
+        productTable.closest(
+            ".dashboard-section"
+        );
+
+    if (section) {
+
+        section.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+}
+
+
+/* =========================================================
+   STOCK
+   ========================================================= */
+
+function goToStock() {
+
+    const stockGrid =
+        document.querySelector(
+            ".stock-management-grid"
+        );
+
+    if (!stockGrid) return;
+
+    const section =
+        stockGrid.closest(
+            ".dashboard-section"
+        );
+
+    if (section) {
+
+        section.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+}
+
+
+/* =========================================================
+   ORDERS
+   ========================================================= */
+
+function goToOrders() {
+
+    const orders =
+        document.getElementById(
+            "customer-orders"
+        );
+
+    if (orders) {
+
+        orders.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+        return;
+    }
+
+    if (
+        typeof openOrdersManagement === "function"
+    ) {
+
+        openOrdersManagement();
+
+    }
+
+}
+
+
+/* =========================================================
+   CUSTOMERS
+   ========================================================= */
+
+function goToCustomers() {
+
+    const orders =
+        document.getElementById(
+            "customer-orders"
+        );
+
+    if (orders) {
+
+        orders.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+        return;
+    }
+
+}
+
+
+/* =========================================================
+   DASHBOARD STATISTICS
+   ========================================================= */
+
+function updateDashboardStatistics() {
+
+    const productData =
+        JSON.parse(
+            localStorage.getItem(
+                "ardProducts"
+            )
+        ) || [];
+
+
+    const orderData =
+        JSON.parse(
+            localStorage.getItem(
+                "ardOrders"
+            )
+        ) || [];
+
+
+    /* -----------------------------------------
+       TOTAL PRODUCTS
+    ----------------------------------------- */
+
+    const productCount =
+        document.querySelector(
+            ".stats-grid .stat-card:nth-child(1) h2"
+        );
+
+    if (productCount) {
+
+        productCount.textContent =
+            productData.length;
+
+    }
+
+
+    /* -----------------------------------------
+       TOTAL ORDERS
+    ----------------------------------------- */
+
+    const orderCount =
+        document.querySelector(
+            ".stats-grid .stat-card:nth-child(2) h2"
+        );
+
+    if (orderCount) {
+
+        orderCount.textContent =
+            orderData.length;
+
+    }
+
+
+    /* -----------------------------------------
+       LOW STOCK
+    ----------------------------------------- */
+
+    const lowStockProducts =
+        productData.filter(function (product) {
+
+            return Number(
+                product.stock
+            ) <= 5;
+
+        });
+
+
+    const lowStockCount =
+        document.querySelector(
+            ".stats-grid .stat-card:nth-child(3) h2"
+        );
+
+    if (lowStockCount) {
+
+        lowStockCount.textContent =
+            lowStockProducts.length;
+
+    }
+
+
+    /* -----------------------------------------
+       CUSTOMERS
+    ----------------------------------------- */
+
+    const customerSet =
+        new Set();
+
+
+    orderData.forEach(function (order) {
+
+        const mobile =
+            order.mobile ||
+            order.customerMobile ||
+            order.phone;
+
+
+        const name =
+            order.customerName ||
+            order.name;
+
+
+        if (mobile) {
+
+            customerSet.add(
+                String(mobile)
+            );
+
+        } else if (name) {
+
+            customerSet.add(
+                String(name)
+            );
+
+        }
+
+    });
+
+
+    const customerCount =
+        document.querySelector(
+            ".stats-grid .stat-card:nth-child(4) h2"
+        );
+
+
+    if (customerCount) {
+
+        customerCount.textContent =
+            customerSet.size;
+
+    }
+
+
+    /* -----------------------------------------
+       ORDER SUMMARY
+    ----------------------------------------- */
+
+    updateMasterOrderSummary(
+        orderData
+    );
+
+}
+
+
+/* =========================================================
+   ORDER SUMMARY
+   ========================================================= */
+
+function updateMasterOrderSummary(
+    orderData
+) {
+
+    const totalOrders =
+        document.getElementById(
+            "totalOrders"
+        );
+
+
+    const pendingOrders =
+        document.getElementById(
+            "pendingOrders"
+        );
+
+
+    const completedOrders =
+        document.getElementById(
+            "completedOrders"
+        );
+
+
+    const totalOrderValue =
+        document.getElementById(
+            "totalOrderValue"
+        );
+
+
+    let pending = 0;
+
+    let completed = 0;
+
+    let totalValue = 0;
+
+
+    orderData.forEach(function (order) {
+
+        const status =
+            String(
+                order.status || "Pending"
+            ).toLowerCase();
+
+
+        if (
+            status === "pending"
+        ) {
+
+            pending++;
+
+        }
+
+
+        if (
+            status === "completed"
+        ) {
+
+            completed++;
+
+        }
+
+
+        totalValue +=
+            Number(
+                order.total || 0
+            );
+
+    });
+
+
+    if (totalOrders) {
+
+        totalOrders.textContent =
+            orderData.length;
+
+    }
+
+
+    if (pendingOrders) {
+
+        pendingOrders.textContent =
+            pending;
+
+    }
+
+
+    if (completedOrders) {
+
+        completedOrders.textContent =
+            completed;
+
+    }
+
+
+    if (totalOrderValue) {
+
+        totalOrderValue.textContent =
+            "₹" +
+            totalValue.toLocaleString(
+                "en-IN"
+            );
+
+    }
+
+}
+
+
+/* =========================================================
+   REFRESH DASHBOARD WHEN PAGE BECOMES ACTIVE
+   ========================================================= */
+
+window.addEventListener(
+    "storage",
+    function () {
+
+        updateDashboardStatistics();
+
+    }
+);
+
+
+/* =========================================================
+   REFRESH AFTER COMMON ADMIN ACTIONS
+   ========================================================= */
+
+function refreshARDashboard() {
+
+    if (
+        typeof displayProducts === "function"
+    ) {
+
+        displayProducts();
+
+    }
+
+
+    if (
+        typeof displayCustomerOrders === "function"
+    ) {
+
+        displayCustomerOrders();
+
+    }
+
+
+    if (
+        typeof updateSalesReport === "function"
+    ) {
+
+        updateSalesReport();
+
+    }
+
+
+    updateDashboardStatistics();
+
+}
+/* =========================================================
+   ARD ENTERPRISES
+   FINAL ADMIN DASHBOARD NAVIGATION
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const sidebar = document.querySelector(".sidebar");
+
+    if (!sidebar) return;
+
+    const links = sidebar.querySelectorAll("a");
+
+    links.forEach(function (link) {
+
+        const text = link.textContent
+            .replace(/[^\w\s]/g, "")
+            .trim()
+            .toLowerCase();
+
+
+        /* =========================================
+           VIEW WEBSITE
+        ========================================= */
+
+        if (text.includes("view website")) {
+
+            link.onclick = function () {
+
+                window.location.href = "index.html";
+
+            };
+
+            return;
+        }
+
+
+        /* =========================================
+           REMOVE OLD # LINK
+        ========================================= */
+
+        link.removeAttribute("href");
+
+
+        /* =========================================
+           DASHBOARD
+        ========================================= */
+
+        if (text.includes("dashboard")) {
+
+            link.onclick = function (e) {
+
+                e.preventDefault();
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
+                setActiveDashboardLink(link);
+
+            };
+
+        }
+
+
+        /* =========================================
+           PRODUCTS
+        ========================================= */
+
+        else if (
+            text === "products"
+        ) {
+
+            link.onclick = function (e) {
+
+                e.preventDefault();
+
+                const table =
+                    document.getElementById(
+                        "productTableBody"
+                    );
+
+                if (table) {
+
+                    const section =
+                        table.closest(
+                            ".dashboard-section"
+                        );
+
+                    if (section) {
+
+                        section.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start"
+                        });
+
+                    }
+
+                }
+
+                setActiveDashboardLink(link);
+
+            };
+
+        }
+
+
+        /* =========================================
+           ADD PRODUCT
+        ========================================= */
+
+        else if (
+            text.includes("add product")
+        ) {
+
+            link.onclick = function (e) {
+
+                e.preventDefault();
+
+                if (
+                    typeof openAddProduct ===
+                    "function"
+                ) {
+
+                    openAddProduct();
+
+                }
+
+                setActiveDashboardLink(link);
+
+            };
+
+        }
+
+
+        /* =========================================
+           ORDERS
+        ========================================= */
+
+        else if (
+            text.includes("orders")
+        ) {
+
+            link.onclick = function (e) {
+
+                e.preventDefault();
+
+                const section =
+                    document.getElementById(
+                        "customer-orders"
+                    );
+
+                if (section) {
+
+                    section.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
+                }
+
+                setActiveDashboardLink(link);
+
+            };
+
+        }
+
+
+        /* =========================================
+           STOCK
+        ========================================= */
+
+        else if (
+            text.includes("stock")
+        ) {
+
+            link.onclick = function (e) {
+
+                e.preventDefault();
+
+                const stock =
+                    document.querySelector(
+                        ".stock-management-grid"
+                    );
+
+                if (stock) {
+
+                    const section =
+                        stock.closest(
+                            ".dashboard-section"
+                        );
+
+                    if (section) {
+
+                        section.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start"
+                        });
+
+                    }
+
+                }
+
+                setActiveDashboardLink(link);
+
+            };
+
+        }
+
+
+        /* =========================================
+           CUSTOMERS
+        ========================================= */
+
+        else if (
+            text.includes("customers")
+        ) {
+
+            link.onclick = function (e) {
+
+                e.preventDefault();
+
+                /*
+                   अभी Customer Orders ही customer
+                   information का source है.
+                */
+
+                const section =
+                    document.getElementById(
+                        "customer-orders"
+                    );
+
+                if (section) {
+
+                    section.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
+                }
+
+                setActiveDashboardLink(link);
+
+            };
+
+        }
+
+    });
+
+
+    /* =========================================
+       ACTIVE MENU STYLE
+    ========================================= */
+
+    function setActiveDashboardLink(activeLink) {
+
+        links.forEach(function (item) {
+
+            item.classList.remove("active");
+
+        });
+
+        activeLink.classList.add("active");
+
+    }
+
+
+    /* =========================================
+       LIVE DASHBOARD NUMBERS
+    ========================================= */
+
+    updateDashboardNumbers();
+
+});
+
+
+/* =========================================================
+   LIVE DASHBOARD STATISTICS
+   ========================================================= */
+
+function updateDashboardNumbers() {
+
+    const productData =
+        JSON.parse(
+            localStorage.getItem(
+                "ardProducts"
+            )
+        ) || [];
+
+
+    const orderData =
+        JSON.parse(
+            localStorage.getItem(
+                "ardOrders"
+            )
+        ) || [];
+
+
+    /* =========================================
+       CUSTOMERS
+    ========================================= */
+
+    const customerSet =
+        new Set();
+
+
+    orderData.forEach(function (order) {
+
+        const mobile =
+            order.customerMobile ||
+            order.mobile ||
+            order.phone;
+
+
+        const name =
+            order.customerName ||
+            order.name;
+
+
+        if (mobile) {
+
+            customerSet.add(
+                String(mobile)
+            );
+
+        }
+        else if (name) {
+
+            customerSet.add(
+                String(name)
+            );
+
+        }
+
+    });
+
+
+    /* =========================================
+       LOW STOCK
+    ========================================= */
+
+    const lowStock =
+        productData.filter(
+            function (product) {
+
+                return Number(
+                    product.stock || 0
+                ) <= 5;
+
+            }
+        );
+
+
+    /* =========================================
+       STAT CARDS
+    ========================================= */
+
+    const stats =
+        document.querySelectorAll(
+            ".stats-grid .stat-card h2"
+        );
+
+
+    if (stats[0]) {
+
+        stats[0].textContent =
+            productData.length;
+
+    }
+
+
+    if (stats[1]) {
+
+        stats[1].textContent =
+            orderData.length;
+
+    }
+
+
+    if (stats[2]) {
+
+        stats[2].textContent =
+            lowStock.length;
+
+    }
+
+
+    if (stats[3]) {
+
+        stats[3].textContent =
+            customerSet.size;
+
+    }
+
+
+    /* =========================================
+       ORDER SUMMARY
+    ========================================= */
+
+    const totalOrders =
+        document.getElementById(
+            "totalOrders"
+        );
+
+
+    const pendingOrders =
+        document.getElementById(
+            "pendingOrders"
+        );
+
+
+    const completedOrders =
+        document.getElementById(
+            "completedOrders"
+        );
+
+
+    const totalOrderValue =
+        document.getElementById(
+            "totalOrderValue"
+        );
+
+
+    let pending = 0;
+
+    let completed = 0;
+
+    let totalValue = 0;
+
+
+    orderData.forEach(function (order) {
+
+        const status =
+            String(
+                order.status ||
+                "Pending"
+            ).toLowerCase();
+
+
+        if (
+            status === "pending"
+        ) {
+
+            pending++;
+
+        }
+
+
+        if (
+            status === "completed"
+        ) {
+
+            completed++;
+
+        }
+
+
+        totalValue +=
+            Number(
+                order.total || 0
+            );
+
+    });
+
+
+    if (totalOrders) {
+
+        totalOrders.textContent =
+            orderData.length;
+
+    }
+
+
+    if (pendingOrders) {
+
+        pendingOrders.textContent =
+            pending;
+
+    }
+
+
+    if (completedOrders) {
+
+        completedOrders.textContent =
+            completed;
+
+    }
+
+
+    if (totalOrderValue) {
+
+        totalOrderValue.textContent =
+            "₹" +
+            totalValue.toLocaleString(
+                "en-IN"
+            );
+
+    }
+
+}
+
+
+/* =========================================================
+   REFRESH DASHBOARD AFTER DATA CHANGES
+   ========================================================= */
+
+window.addEventListener(
+    "storage",
+    function () {
+
+        updateDashboardNumbers();
+
+    }
+);/* =========================================================
+   DASHBOARD STAT CARDS - CLICKABLE
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    setupDashboardStatCards();
+
+});
+
+
+function setupDashboardStatCards() {
+
+    const cards =
+        document.querySelectorAll(
+            ".stats-grid .stat-card"
+        );
+
+    if (!cards.length) return;
+
+
+    /* =========================================
+       TOTAL PRODUCTS
+    ========================================= */
+
+    if (cards[0]) {
+
+        cards[0].style.cursor = "pointer";
+
+        cards[0].onclick = function () {
+
+            const productTable =
+                document.getElementById(
+                    "productTableBody"
+                );
+
+            if (!productTable) return;
+
+            const section =
+                productTable.closest(
+                    ".dashboard-section"
+                );
+
+            if (section) {
+
+                section.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            }
+
+        };
+
+    }
+
+
+    /* =========================================
+       ORDERS
+    ========================================= */
+
+    if (cards[1]) {
+
+        cards[1].style.cursor = "pointer";
+
+        cards[1].onclick = function () {
+
+            const ordersSection =
+                document.getElementById(
+                    "customer-orders"
+                );
+
+            if (ordersSection) {
+
+                ordersSection.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            }
+
+        };
+
+    }
+
+
+    /* =========================================
+       LOW STOCK
+    ========================================= */
+
+    if (cards[2]) {
+
+        cards[2].style.cursor = "pointer";
+
+        cards[2].onclick = function () {
+
+            const stock =
+                document.querySelector(
+                    ".stock-management-grid"
+                );
+
+            if (!stock) return;
+
+            const section =
+                stock.closest(
+                    ".dashboard-section"
+                );
+
+            if (section) {
+
+                section.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            }
+
+        };
+
+    }
+
+
+    /* =========================================
+       CUSTOMERS
+    ========================================= */
+
+    if (cards[3]) {
+
+        cards[3].style.cursor = "pointer";
+
+        cards[3].onclick = function () {
+
+            const customerSection =
+                document.getElementById(
+                    "customer-orders"
+                );
+
+            if (customerSection) {
+
+                customerSection.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            }
+
+        };
+
+    }
+
+}
