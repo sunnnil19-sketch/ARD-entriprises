@@ -236,58 +236,56 @@
 
             <div class="quick-grid">
 
-                <div class="quick-card">
+                <div class="quick-card" onclick="openAddProduct()">
 
-                    <div>➕</div>
+    <div>➕</div>
 
-                    <h3>Add Product</h3>
+    <h3>Add Product</h3>
 
-                    <p>
-                        Add a new electrical product.
-                    </p>
+    <p>
+        Add a new electrical product.
+    </p>
 
-                </div>
-
-
-                <div class="quick-card">
-
-                    <div>💰</div>
-
-                    <h3>Update Price</h3>
-
-                    <p>
-                        Change product selling price.
-                    </p>
-
-                </div>
+</div>
 
 
-                <div class="quick-card">
+               <div class="quick-card" onclick="openUpdatePrice()">
 
-                    <div>📦</div>
+    <div>💰</div>
 
-                    <h3>Manage Stock</h3>
+    <h3>Update Price</h3>
 
-                    <p>
-                        Update available stock.
-                    </p>
+    <p>
+        Change product selling price.
+    </p>
 
-                </div>
+</div>
 
 
-                <div class="quick-card">
+                <div class="quick-card" onclick="openStockManagement()">
 
-                    <div>📋</div>
+    <div>📦</div>
 
-                    <h3>View Orders</h3>
+    <h3>Manage Stock</h3>
 
-                    <p>
-                        Check customer orders.
-                    </p>
+    <p>
+        Update available stock.
+    </p>
 
-                </div>
+</div>
 
-            </div>
+
+                <div class="quick-card" onclick="openOrdersManagement()">
+
+    <div>📋</div>
+
+    <h3>View Orders</h3>
+
+    <p>
+        Check customer orders.
+    </p>
+
+</div>
 
         </section>
 
@@ -334,9 +332,6 @@
                         <tbody id="productTableBody">
 
 </tbody>
-                        
-                    </tbody>
-
                 </table>
 
             </div>
@@ -496,7 +491,7 @@
      CUSTOMER ORDERS
 ========================= -->
 
-<section class="dashboard-section">
+<section class="dashboard-section" id="customer-orders">
 
     <div class="section-title">
 
@@ -979,6 +974,62 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="script.js"></script>
+<!-- =========================
+     UPDATE PRICE MODAL
+========================== -->
 
+<div id="updatePriceModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h2>Update Product Price</h2>
+
+            <button type="button"
+                    class="close-btn"
+                    onclick="closeUpdatePrice()">
+                ×
+            </button>
+        </div>
+
+        <div class="modal-body">
+
+            <label for="updatePriceProduct">
+                Select Product
+            </label>
+
+            <select id="updatePriceProduct">
+                <option value="">Select Product</option>
+            </select>
+
+            <label for="newProductPrice">
+                New Selling Price
+            </label>
+
+            <input type="number"
+                   id="newProductPrice"
+                   placeholder="Enter new price"
+                   min="0"
+                   step="0.01">
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button type="button"
+                    onclick="closeUpdatePrice()">
+                Cancel
+            </button>
+
+            <button type="button"
+                    onclick="saveUpdatedPrice()">
+                Update Price
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 </body>
 </html>

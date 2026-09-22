@@ -3327,3 +3327,228 @@ function removeFromCart(index) {
     displayCart();
 }
 displayCart();
+function openAddProduct() {
+
+    const modal =
+        document.getElementById("productModal");
+
+    if (!modal) return;
+
+    editingProductId = null;
+
+    const form =
+        document.getElementById("productForm");
+
+    if (form) {
+        form.reset();
+    }
+
+    const title =
+        document.querySelector(".modal-header h2");
+
+    if (title) {
+        title.textContent = "Add New Product";
+    }
+
+    const saveButton =
+        document.querySelector(".save-product-btn");
+
+    if (saveButton) {
+        saveButton.textContent = "Save Product";
+    }
+
+    modal.classList.add("show");
+}/* =========================
+   UPDATE PRODUCT PRICE
+========================= */
+
+function openUpdatePrice() {
+
+    const modal =
+        document.getElementById("updatePriceModal");
+
+    const select =
+        document.getElementById("updatePriceProduct");
+
+    if (!modal || !select) return;
+
+    // Clear previous options
+    select.innerHTML =
+        '<option value="">Select Product</option>';
+
+    // Load latest products
+    const currentProducts =
+        JSON.parse(localStorage.getItem("ardProducts")) || [];
+
+    currentProducts.forEach(product => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = product.id;
+
+        option.textContent =
+            `${product.name} — ₹${product.price}`;
+
+        select.appendChild(option);
+    });
+
+    document.getElementById("newProductPrice").value = "";
+
+    modal.classList.add("show");
+}
+
+
+function closeUpdatePrice() {
+
+    const modal =
+        document.getElementById("updatePriceModal");
+
+    if (modal) {
+        modal.classList.remove("show");
+    }
+}
+
+
+function saveUpdatedPrice() {
+
+    const productId =
+        document.getElementById("updatePriceProduct").value;
+
+    const newPrice =
+        parseFloat(
+            document.getElementById("newProductPrice").value
+        );
+
+    if (!productId) {
+        alert("Please select a product.");
+        return;
+    }
+
+    if (isNaN(newPrice) || newPrice < 0) {
+        alert("Please enter a valid price.");
+        return;
+    }
+
+    const currentProducts =
+        JSON.parse(localStorage.getItem("ardProducts")) || [];
+
+    const product =
+        currentProducts.find(
+            p => String(p.id) === String(productId)
+        );
+
+    if (!product) {
+        alert("Product not found.");
+        return;
+    }
+
+    product.price = newPrice;
+
+    localStorage.setItem(
+        "ardProducts",
+        JSON.stringify(currentProducts)
+    );
+
+    // Update global products array also
+    products = currentProducts;
+
+    // Refresh product table
+    if (typeof displayProducts === "function") {
+        displayProducts();
+    }
+
+    closeUpdatePrice();
+
+    alert("Product price updated successfully.");
+}function openStockManagement() {
+
+    const stockSection =
+        document.querySelector(".stock-management-grid");
+
+    if (stockSection) {
+
+        stockSection.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+        return;
+    }
+
+    // Fallback: open Stock In modal
+    if (typeof openStockIn === "function") {
+        openStockIn();
+    }
+}function openOrdersManagement() {
+
+    const ordersSection =
+        document.getElementById("customer-orders");
+
+    if (ordersSection) {
+
+        ordersSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+        return;
+    }
+
+    // Fallback: search by heading
+    const headings =
+        document.querySelectorAll("h2, h3");
+
+    for (const heading of headings) {
+
+        if (
+            heading.textContent
+                .trim()
+                .toLowerCase()
+                .includes("customer orders")
+        ) {
+
+            heading.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+            return;
+        }
+    }
+}/* =========================================
+   DASHBOARD - ADD PRODUCT QUICK ACTION
+========================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const allHeadings = document.querySelectorAll("h2, h3");
+
+    allHeadings.forEach(function (heading) {
+
+        if (
+            heading.textContent.trim().toLowerCase() === "add product"
+        ) {
+
+            const card = heading.closest(
+                ".dashboard-card, .action-card, .feature-card"
+            );
+
+            if (card && !card.classList.contains("quick-card")) {
+
+                card.style.cursor = "pointer";
+
+                card.addEventListener("click", function () {
+
+                    if (typeof showAddProduct === "function") {
+                        showAddProduct();
+                    }
+
+                });
+
+            }
+        }
+
+    });
+
+});
